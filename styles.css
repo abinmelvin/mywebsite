@@ -18,7 +18,7 @@ body {
   position: relative;
   z-index: 2; /* always above background */
   white-space: pre-wrap;
-  /*padding: 20px;*/
+  padding: 5px;
 }
 
 /* ---------- CURSOR ---------- */
@@ -116,3 +116,4 @@ body {
 @keyframes fadeIn {
   to { opacity: 1; }
 }
+
