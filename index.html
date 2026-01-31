@@ -1,13 +1,232 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Home</title>
-        <link rel="stylesheet" href="styles.css">
+        <title><?></title>
+        <link rel="icon" type="image/x-icon" href="og.jpg">
+        <link rel="stylesheet" href="styles1.css">
     </head>
-    <body>
-        <div class="main">
-            ?
-        </div>
+<body>
+  <div id="bg-question"><p>?</p></div>
+  <div class="terminal" id="terminal"></div>
 
-    </body>
+  <script>
+    const terminal = document.getElementById("terminal");
+
+    /* ---------- BOOT SEQUENCE 1 ---------- */
+
+    const bootLines = [
+      "[    Booting up.............................................................................",
+      "[    0.000000] Initializing cgroup subsys cpuset",
+      "[    0.142313] Linux version 6.5.0 (gcc)",
+      "[    1.203992] ACPI: Early table checksum verification disabled",
+      "[    2.331021] systemd[1]: Starting Journal Service...",
+      "[    2.914201] systemd[1]: Started Journal Service.",
+      "[    3.402118] random: crng init done",
+      "[    4.001992] EXT4-fs (sda1): mounted filesystem",
+      "[    OK ] Reached target Multi-User System",
+      "[    0.187221] CPU0: Thermal monitoring enabled",
+      "[    0.294112] Spectre V2 mitigation: Retpolines enabled",
+      "[    0.401882] Kernel command line: BOOT_IMAGE=/vmlinuz root=/dev/sda1 ro quiet",
+      "[    0.612441] Memory: 16384MB available (15872MB usable)",
+      "[    0.733102] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8",
+      "[    0.921554] Mount-cache hash table entries: 32768",
+      "[    1.012331] pci 0000:00:00.0: BAR 0 assigned",
+      "[    1.144992] PCI: Using configuration type 1 for base access",
+      "[    1.311221] clocksource: tsc: mask: 0xffffffffffffffff",
+      "[    1.492001] futex hash table entries: 2048",
+      "[    1.603882] NET: Registered protocol family 16",
+      "[    1.734221] ACPI: bus type USB registered",
+      "[    1.901992] usbcore: registered new interface driver usbfs",
+      "[    2.044311] usbcore: registered new interface driver hub",
+      "[    2.201551] usbcore: registered new device driver usb",
+      "[    2.355002] systemd[1]: Detected architecture x86-64",
+      "[    2.472881] systemd[1]: Set hostname to <unknown>",
+      "[    2.611331] systemd[1]: Starting udev Kernel Device Manager...",
+      "[    2.792441] systemd[1]: Started udev Kernel Device Manager.",
+      "[    2.933118] systemd[1]: Starting Network Service...",
+      "[    3.101221] systemd[1]: Started Network Service.",
+      "[    3.262771] random: fast init done",
+      "[    3.441992] EXT4-fs (sda1): recovery complete",
+      "[    3.603114] EXT4-fs (sda1): mounted with ordered data mode",
+      "[    3.744551] systemd[1]: Reached target Basic System.",
+      "[    3.892002] systemd[1]: Starting Login Service...",
+      "[    OK ] Started Login Service",
+      "[    OK ] Reached target Graphical Interface"
+
+    ];
+
+    function runBoot(callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < bootLines.length) {
+          const line = document.createElement("div");
+          line.textContent = bootLines[i];
+          terminal.appendChild(line);
+          i++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            terminal.innerHTML = "";
+            const bg = document.getElementById("bg-question");
+            if (bg) bg.classList.add("active"); // 👈 SHOW ?
+            callback();
+          }, 1500);
+        }
+      }, Math.random() * 150 + 100);
+    }
+
+    /* ---------- TYPED TERMINAL ---------- */
+
+    const typedPrompt = "query@unknown:~$ ";
+    const finalPrompt = "knight@node:~$ ";
+
+    const lines = [
+      "solve this if you dare",
+      "0f 1a 10 1e",
+      "XOR is enough if the key is secret.",
+      "Hash it if you doubt it.",
+      "Rotate if you must.",
+      "The key is not random.",
+      "The key expires.",
+      "The key can be derived, not stored."
+    ];
+
+    let lineIndex = 0;
+
+    function typeLine(text, callback) {
+      const line = document.createElement("div");
+      terminal.appendChild(line);
+
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.textContent = "█";
+
+      line.textContent = typedPrompt;
+      line.appendChild(cursor);
+
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          line.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+        } else {
+          clearInterval(interval);
+          cursor.remove();
+          callback();
+        }
+      }, Math.random() * 40 + 40);
+    }
+
+    function runTypedLines() {
+      if (lineIndex >= lines.length) {
+        showInputPrompt();
+        return;
+      }
+
+      typeLine(lines[lineIndex], () => {
+        lineIndex++;
+        setTimeout(runTypedLines, 300);
+      });
+    }
+
+    /* ---------- LIVE INPUT PROMPT ---------- */
+
+    function showInputPrompt() {
+      const line = document.createElement("div");
+
+      const prompt = document.createElement("span");
+      prompt.textContent = finalPrompt;
+
+      const input = document.createElement("input");
+      input.className = "terminal-input";
+      input.id = "terminal-input";
+
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.textContent = "<?>";
+
+      line.appendChild(prompt);
+      line.appendChild(input);
+      line.appendChild(cursor);
+      terminal.appendChild(line);
+
+      input.focus();
+
+      input.addEventListener("input", () => {
+        input.style.width = "0px";
+        input.style.width = input.scrollWidth + "px";
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const command = input.value.trim();
+          const secret = atob("dGltZQ=="); // secret === "time"
+
+          if (command === secret) {
+           runTimeSequence();
+          }
+        }
+      });
+    }
+
+    /* ---------- BOOT SEQUENCE 2 (time) ---------- */
+
+    const bootLinesTime = [
+      "[    0.000000] Restarting system...",
+      "[    0.421882] Loading kernel modules",
+      "[    1.102331] Initializing entropy pool",
+      "[    2.004992] systemd[1]: Starting Time Service...",
+      "[    2.774221] systemd[1]: Started Time Service.",
+      "[    OK ] System time initialized",
+      "well well well........."
+    ];
+
+    function runTimeSequence() {
+      terminal.innerHTML = "";
+
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < bootLinesTime.length) {
+          const line = document.createElement("div");
+          line.textContent = bootLinesTime[i];
+          terminal.appendChild(line);
+          i++;
+        } else {
+          clearInterval(interval);
+          setTimeout(showImagePlaceholder, 800);
+        }
+      }, Math.random() * 120 + 350);
+    }
+
+    /* ---------- IMAGE PLACEHOLDER ---------- */
+
+    function showImagePlaceholder() {
+        terminal.innerHTML = "";
+
+        const bg = document.getElementById("bg-question");
+        if (bg) bg.classList.add("hide");
+
+        const img = document.createElement("img");
+        img.src = "monk.jpg";
+        img.alt = "visual";
+        img.className = "center-image";
+
+        terminal.appendChild(img);
+    }
+
+
+
+    /* ---------- FOCUS LOCK ---------- */
+
+    document.addEventListener("click", () => {
+      const input = document.getElementById("terminal-input");
+      if (input) input.focus();
+    });
+
+    /* ---------- START ---------- */
+
+    runBoot(runTypedLines);
+  </script>
+</body>
 </html>
+
