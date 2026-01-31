@@ -1,21 +1,118 @@
-*{
-    padding: 0px;
-    margin: 0px;
-    font-family:'Times New Roman', Times, serif;
-    font-size: 300px;
-    color: green;
-    background-color: black;
-    text-shadow: 0px 0px 20px rgb(0, 128, 0);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.main{
-    display: flex;
-    justify-content: center;
-    padding-top: 150px;
+
+/* ---------- BODY ---------- */
+body {
+  background: black;
+  color: green;
+  font-family: monospace;
+  font-size: 18px;
+  overflow: hidden;
 }
-.cat1{
-    align-self: center;
-    vertical-align: middle;
-    height: 500px;
-    object-fit: cover;
-    border-radius: 10px 10px 10px 10px;
+
+/* ---------- TERMINAL ---------- */
+.terminal {
+  position: relative;
+  z-index: 2; /* always above background */
+  white-space: pre-wrap;
+  /*padding: 20px;*/
+}
+
+/* ---------- CURSOR ---------- */
+.cursor {
+  display: inline-block;
+  margin-left: -1px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ---------- INPUT ---------- */
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: green;
+  font-family: monospace;
+  font-size: 18px;
+  caret-color: transparent;
+  width: 0;
+  overflow: hidden;
+}
+
+/* ---------- BACKGROUND QUESTION MARK ---------- */
+#bg-question {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: clamp(200px, 50vmin, 60vw);
+  font-family: 'Riddler';
+  color: black;
+
+  text-shadow:
+    0 0 10px rgba(0,128,0,0.4),
+    0 0 25px rgba(0,128,0,0.6),
+    0 0 50px rgba(0,128,0,0.8);
+
+  opacity: 0;           /* hidden by default */
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* SHOWN AFTER BOOT */
+#bg-question.active {
+  opacity: 1;
+  animation: neonPulse 2.5s ease-in-out infinite alternate;
+}
+
+/* HIDE WHEN IMAGE SHOWS */
+#bg-question.hide {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* ---------- IMAGE ---------- */
+.center-image {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+  max-height: 90vh;
+  opacity: 0;
+  animation: fadeIn 1.2s ease forwards;
+}
+
+/* ---------- FONT ---------- */
+@font-face {
+  font-family: 'Riddler';
+  src: url('Riddler Writing 2022.ttf') format('truetype');
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes neonPulse {
+  0% {
+    text-shadow: 0 0 5px rgba(0,128,0,0.2);
+  }
+  50% {
+    text-shadow:
+      0 0 25px rgba(0,128,0,1),
+      0 0 60px rgba(0,128,0,0.8);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(0,128,0,0.2);
+  }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
